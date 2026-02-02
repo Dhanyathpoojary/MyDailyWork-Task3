@@ -5,55 +5,151 @@
 }
 
 body {
-    font-family: Arial, sans-serif;
-    background: linear-gradient(135deg, #4f46e5, #06b6d4);
+    font-family: "Segoe UI", Arial, sans-serif;
     min-height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
+    background: linear-gradient(135deg, #6366f1, #22d3ee);
 }
 
 .container {
-    background-color: white;
-    padding: 40px;
+    background: rgba(255, 255, 255, 0.95);
+    padding: 45px 35px;
     width: 90%;
-    max-width: 400px;
+    max-width: 420px;
     text-align: center;
-    border-radius: 10px;
+    border-radius: 16px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+    animation: fadeIn 0.8s ease;
 }
 
 .container h1 {
-    margin-bottom: 15px;
-    color: #333;
+    margin-bottom: 12px;
+    font-size: 28px;
+    color: #1f2937;
 }
 
 .container p {
-    margin-bottom: 30px;
-    color: #555;
+    margin-bottom: 35px;
+    font-size: 15px;
+    color: #6b7280;
 }
 
 .buttons {
     display: flex;
     flex-direction: column;
-    gap: 15px;
+    gap: 18px;
 }
 
 .btn {
     text-decoration: none;
-    padding: 12px;
-    background-color: #4f46e5;
-    color: white;
-    border-radius: 5px;
-    font-weight: bold;
-}
-
-.btn-outline {
-    background-color: transparent;
-    border: 2px solid #4f46e5;
-    color: #4f46e5;
+    padding: 14px;
+    background: linear-gradient(135deg, #ee70cc, #2124d8);
+    color: #fff;
+    border-radius: 10px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    transition: all 0.3s ease;
+    box-shadow: 0 10px 20px rgba(79, 70, 229, 0.3);
 }
 
 .btn:hover {
-    opacity: 0.9;
+    transform: translateY(-3px);
+    box-shadow: 0 15px 25px rgba(79, 70, 229, 0.4);
 }
 
+.btn-outline {
+    background: transparent;
+    border: 2px solid #4f46e5;
+    color: #4f46e5;
+    box-shadow: none;
+}
+
+.btn-outline:hover {
+    background: #2e20f4;
+    color: #fff;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+/* Form layout */
+form {
+    display: flex;
+    flex-direction:column;
+    gap:10px;
+   
+}
+
+/* Labels */
+label {
+    text-align: left;
+    font-weight: bold;
+}
+
+/* Inputs & dropdown */
+input, select {
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    font-size: 14px;
+}
+/* Quiz card */
+/* Page heading spacing */
+.container h1 {
+    margin-bottom: 8px;
+}
+
+.container p {
+    margin-bottom: 20px;
+    font-size: 14px;
+}
+
+/* Quiz card professional look */
+.quiz-card {
+    background-color: #f9fafb;
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 20px;
+
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+}
+
+/* Quiz title */
+.quiz-card h3 {
+    margin: 0;
+    color: #1f2937;
+}
+.quiz-card .btn {
+    width:100%;
+    text-align: center;
+}
+/* Quiz options */
+.quiz-card form {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.quiz-card label {
+    background-color: #e8eff2;
+    padding: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.quiz-card input[type="radio"] {
+    margin-right: 8px;
+}
