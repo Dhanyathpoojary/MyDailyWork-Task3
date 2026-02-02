@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Quiz Result</title>
+
+    <!-- Mobile responsive -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Common CSS -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="container">
+
+        <h1>Quiz Result</h1>
+        <p>Your performance is shown below</p>
+
+        <!-- Result card -->
+        <div class="quiz-card">
+
+            <h3>Your Score</h3>
+            <p class="score" id="scoreText"></p>
+
+            <hr>
+
+            <h3>Correct Answer</h3>
+            <p id="correctAnswerText"></p>
+
+            <a href="quiz-list.html" class="btn">Back to Quiz List</a>
+
+
+        </div>
+
+    </div>
+    <script>
+    const score = localStorage.getItem("score");
+    const correctAnswer = localStorage.getItem("correctAnswer");
+
+    document.getElementById("scoreText").textContent = score + " / 1";
+    document.getElementById("correctAnswerText").textContent = correctAnswer;
+    </script>
+
+
+</body>
+</html>
