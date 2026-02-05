@@ -2,36 +2,80 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Login</title>
-
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login | QuizMaster</title>
+
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-    <div class="container">
+<div class="container auth-container">
 
-        <h1>Login</h1>
-        <p>Login to access quizzes</p>
+    <h2>QuizMaster Login</h2>
+    <p class="subtitle">Login to continue</p>
 
-        <form>
+    <form onsubmit="return false;">
+        <label for="username">Username</label>
+        <input type="text" id="username" placeholder="Enter username" autocomplete="off">
 
-            <label>Email</label>
-            <input type="email" placeholder="Enter your email">
+        <label for="password">Password</label>
+        <input type="password" id="password" placeholder="Enter password">
 
-            <label>Password</label>
-            <input type="password" placeholder="Enter your password">
+        <button type="button" class="btn btn-primary" onclick="handleLogin()">
+            Login
+        </button>
 
-            <button type="submit" class="btn">Login</button>
+        <button type="button" class="btn btn-outline"
+                onclick="window.location.href='register.html'">
+            Register
+        </button>
+    </form>
 
-        </form>
+    <p id="status-msg" class="status-msg"></p>
 
-        <p>
-            New user?
-            <a href="register.html">Register here</a>
-        </p>
+</div>
 
-    </div>
+<script src="auth.js"></script>
+
+<script>
+function handleLogin() {
+    const u = document.getElementById('username').value.trim();
+    const p = document.getElementById('password').value.trim();
+    const status = document.getElementById('status-msg');
+
+    status.innerText = "";
+    status.className = "status-msg";
+
+    if (!u || !p) {
+        status.innerText = "Please enter both username and password.";
+        status.classList.add("error");
+        return;
+    }
+
+    if (typeof loginUser !== 'function') {
+        alert("Auth script not loaded correctly.");
+        return;
+    }
+
+    const USERS_KEY = 'quiz_users';
+    const users = JSON.parse(localStorage.getItem(USERS_KEY) || '[]');
+
+    if (loginUser(u, p)) {
+        status.innerText = "Login successful. Redirecting...";
+        status.classList.add("success");
+
+        setTimeout(() => {
+            window.location.href = 'home.html';
+        }, 600);
+    } else {
+        const userExists = users.find(user => user.username === u);
+        status.innerText = userExists
+            ? "Incorrect password."
+            : "User not found. Please register.";
+        status.classList.add("error");
+    }
+}
+</script>
 
 </body>
 </html>
