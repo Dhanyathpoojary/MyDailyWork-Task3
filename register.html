@@ -2,42 +2,74 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Register</title>
-
-    <!-- Mobile responsive -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register | QuizMaster</title>
 
-    <!-- Common CSS -->
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-    <div class="container">
+<div class="container auth-container">
 
-        <h1>Create Account</h1>
-        <p>Register to create and take quizzes</p>
+    <h2>Create Account</h2>
+    <p class="subtitle">Register to start creating quizzes</p>
 
-        <form>
+    <form onsubmit="return false;">
+        <label for="reg-user">Username</label>
+        <input type="text" id="reg-user" placeholder="Choose a username">
 
-            <label for="name">Name</label>
-            <input type="text" id="name" placeholder="Enter your name">
+        <label for="reg-pass">Password</label>
+        <input type="password" id="reg-pass" placeholder="Choose a password">
 
-            <label for="email">Email</label>
-            <input type="email" id="email" placeholder="Enter your email">
+        <button type="button" class="btn btn-primary" onclick="tryRegister()">
+            Register
+        </button>
 
-            <label for="password">Password</label>
-            <input type="password" id="password" placeholder="Create password">
+        <button type="button" class="btn btn-outline"
+                onclick="window.location.href='login.html'">
+            Back to Login
+        </button>
+    </form>
 
-            <button type="submit" class="btn">Register</button>
+    <p id="reg-msg" class="status-msg"></p>
 
-        </form>
+</div>
 
-        <p>
-            Already have an account?
-            <a href="login.html">Login</a>
-        </p>
+<script>
+function tryRegister() {
+    const u = document.getElementById('reg-user').value.trim();
+    const p = document.getElementById('reg-pass').value.trim();
+    const msg = document.getElementById('reg-msg');
 
-    </div>
+    msg.innerText = "";
+    msg.className = "status-msg";
+
+    if (!u || !p) {
+        msg.innerText = "Please enter both username and password.";
+        msg.classList.add("error");
+        return;
+    }
+
+    const USERS_KEY = 'quiz_users';
+    const users = JSON.parse(localStorage.getItem(USERS_KEY) || '[]');
+
+    if (users.find(user => user.username === u)) {
+        msg.innerText = "Username already exists.";
+        msg.classList.add("error");
+        return;
+    }
+
+    users.push({ username: u, password: p });
+    localStorage.setItem(USERS_KEY, JSON.stringify(users));
+
+    msg.innerText = "Registration successful! Redirecting to login...";
+    msg.classList.add("success");
+
+    setTimeout(() => {
+        window.location.href = 'login.html';
+    }, 800);
+}
+</script>
 
 </body>
 </html>
