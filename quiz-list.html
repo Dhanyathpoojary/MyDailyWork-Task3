@@ -4,38 +4,33 @@
     <meta charset="UTF-8">
     <title>Quiz List</title>
 
-    <!-- Mobile responsive -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <!-- Common CSS -->
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
     <div class="container">
-
         <h1>Available Quizzes</h1>
-        <p>Select a quiz to start.</p>
+        <p>Choose a quiz and start playing</p>
 
-        <!-- Quiz 1 -->
-        <div class="quiz-card">
-            <h3>General Knowledge Quiz</h3>
-            <a href="take-quiz.html" class="btn">Start Quiz</a>
+        <div class="divider"></div>
+
+        
+        <div id="quiz-list" class="quiz-list"></div>
+
+        <div class="logout-section">
+            <button class="btn btn-outline"
+                    onclick="window.location.href='home.html'">
+                Back to Dashboard
+            </button>
         </div>
-
-        <!-- Quiz 2 -->
-        <div class="quiz-card">
-            <h3>HTML Basics Quiz</h3>
-            <a href="take-quiz.html" class="btn">Start Quiz</a>
-        </div>
-
-        <!-- Quiz 3 -->
-        <div class="quiz-card">
-            <h3>JavaScript Basics Quiz</h3>
-            <a href="take-quiz.html" class="btn">Start Quiz</a>
-        </div>
-
     </div>
+
+    <script src="quiz.js"></script>
+    <script>
+        loadQuizList();
+    </script>
 
 </body>
 </html>
