@@ -2,46 +2,70 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Quiz Result</title>
-
-    <!-- Mobile responsive -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <!-- Common CSS -->
+    <title>Quiz Results</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-    <div class="container">
+<div class="container result-container">
 
-        <h1>Quiz Result</h1>
-        <p>Your performance is shown below</p>
+    <h2>Quiz Results</h2>
+    <p class="subtitle">Here is your performance summary</p>
 
-        <!-- Result card -->
-        <div class="quiz-card">
-
-            <h3>Your Score</h3>
-            <p class="score" id="scoreText"></p>
-
-            <hr>
-
-            <h3>Correct Answer</h3>
-            <p id="correctAnswerText"></p>
-
-            <a href="quiz-list.html" class="btn">Back to Quiz List</a>
-
-
-        </div>
-
+    
+    <div class="score-box">
+        <h1 id="score-display">0%</h1>
+        <p id="score-text"></p>
     </div>
-    <script>
-    const score = localStorage.getItem("score");
-    const correctAnswer = localStorage.getItem("correctAnswer");
 
-    document.getElementById("scoreText").textContent = score + " / 1";
-    document.getElementById("correctAnswerText").textContent = correctAnswer;
-    </script>
+    <div class="divider"></div>
 
+   
+    <h3 class="review-title">Answer Review</h3>
+    <div id="review-container" class="review-container"></div>
+
+    <button class="btn btn-primary"
+            onclick="window.location.href='home.html'">
+        Back to Dashboard
+    </button>
+
+</div>
+
+<script>
+const resultData = JSON.parse(localStorage.getItem('quiz_last_result'));
+
+if (resultData) {
+    const percent = Math.round((resultData.score / resultData.total) * 100);
+
+    document.getElementById('score-display').innerText = percent + "%";
+    document.getElementById('score-text').innerText =
+        `You scored ${resultData.score} out of ${resultData.total}`;
+
+    const container = document.getElementById('review-container');
+
+    resultData.details.forEach((item, index) => {
+        const div = document.createElement('div');
+        div.className = 'review-item';
+
+        div.innerHTML = `
+            <strong>Q${index + 1}. ${item.question}</strong>
+            <p>
+                Your Answer:
+                <span class="${item.isCorrect ? 'correct' : 'wrong'}">
+                    ${item.yourAnswer}
+                </span>
+            </p>
+            ${!item.isCorrect ? `
+                <p class="correct">
+                    Correct Answer: ${item.correctAnswer}
+                </p>` : ''}
+        `;
+
+        container.appendChild(div);
+    });
+}
+</script>
 
 </body>
 </html>
