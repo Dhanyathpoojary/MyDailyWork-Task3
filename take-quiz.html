@@ -2,53 +2,120 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Take Quiz</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Take Quiz</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-    <div class="container">
+<div class="container quiz-container">
 
-        <h1>Quiz</h1>
-        <p>Answer the question below</p>
-
-        <div class="quiz-card">
-
-            <h3>What does HTML stand for?</h3>
-
-            <form id="quizForm">
-
-                <label>
-                    <input type="radio" name="answer" value="Hyper Text Markup Language">
-                    Hyper Text Markup Language
-                </label>
-
-                <label>
-                    <input type="radio" name="answer" value="High Text Machine Language">
-                    High Text Machine Language
-                </label>
-
-                <label>
-                    <input type="radio" name="answer" value="Hyper Tool Markup Language">
-                    Hyper Tool Markup Language
-                </label>
-
-                <label>
-                    <input type="radio" name="answer" value="Home Tool Markup Language">
-                    Home Tool Markup Language
-                </label>
-
-                <button type="submit" class="btn">Submit</button>
-
-            </form>
-
+    
+    <div class="quiz-header">
+        <h2 id="quiz-title">Loading Quiz...</h2>
+        <div class="progress-text">
+            Question <span id="current-q-num">1</span> of <span id="total-q-num">?</span>
         </div>
-
     </div>
 
-    <!-- JS file -->
-    <script src="quiz.js"></script>
+    
+    <div class="question-card" id="q-text"></div>
+
+    <div class="options-grid" id="options-container"></div>
+
+    
+    <button id="next-btn" class="next-btn" onclick="handleNext()" style="display:none;">
+        Next Question →
+    </button>
+
+    
+    <button class="quit-btn" onclick="window.location.href='home.html'">
+        Quit Quiz
+    </button>
+
+</div>
+
+<script>
+
+const urlParams = new URLSearchParams(window.location.search);
+const quizId = urlParams.get('id');
+
+const allQuizzes = JSON.parse(localStorage.getItem('quiz_data') || '[]');
+const currentQuiz = allQuizzes.find(q => q.id == quizId);
+
+if (!currentQuiz) {
+    alert("Quiz not found");
+    window.location.href = 'home.html';
+}
+
+document.getElementById('quiz-title').innerText = currentQuiz.title;
+document.getElementById('total-q-num').innerText = currentQuiz.questions.length;
+
+let qIndex = 0;
+let score = 0;
+let userResults = [];
+let selectedOptionIndex = null;
+
+function loadQuestion() {
+    const q = currentQuiz.questions[qIndex];
+
+    document.getElementById('current-q-num').innerText = qIndex + 1;
+    document.getElementById('q-text').innerText = q.text;
+
+    const container = document.getElementById('options-container');
+    container.innerHTML = '';
+
+    document.getElementById('next-btn').style.display = 'none';
+    selectedOptionIndex = null;
+
+    const labels = ['A', 'B', 'C', 'D'];
+    q.options.forEach((opt, i) => {
+        if (opt) {
+            const btn = document.createElement('div');
+            btn.className = 'answer-btn';
+            btn.innerHTML = `<span class="option-label">${labels[i]}</span>${opt}`;
+            btn.onclick = () => selectAnswer(btn, i);
+            container.appendChild(btn);
+        }
+    });
+}
+
+function selectAnswer(btn, index) {
+    document.querySelectorAll('.answer-btn')
+        .forEach(b => b.classList.remove('selected'));
+
+    btn.classList.add('selected');
+    selectedOptionIndex = index;
+    document.getElementById('next-btn').style.display = 'block';
+}
+
+function handleNext() {
+    const q = currentQuiz.questions[qIndex];
+    const isCorrect = selectedOptionIndex === q.correct;
+    if (isCorrect) score++;
+
+    userResults.push({
+        question: q.text,
+        yourAnswer: q.options[selectedOptionIndex],
+        correctAnswer: q.options[q.correct],
+        isCorrect
+    });
+
+    qIndex++;
+    qIndex < currentQuiz.questions.length ? loadQuestion() : finishQuiz();
+}
+
+function finishQuiz() {
+    localStorage.setItem('quiz_last_result', JSON.stringify({
+        score,
+        total: currentQuiz.questions.length,
+        details: userResults
+    }));
+    window.location.href = 'result.html';
+}
+
+loadQuestion();
+</script>
 
 </body>
 </html>
