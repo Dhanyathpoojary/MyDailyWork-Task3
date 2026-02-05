@@ -26,6 +26,6 @@ The application also includes basic user login and registration and is mobile re
 4. User selects an answer and submits  
 5. Final score and correct answer are shown  
 
-#3 Note
+## Note
 This project uses basic frontend JavaScript for learning purposes.  
 Dynamic quiz saving and backend features can be added in the future.
