@@ -2,22 +2,38 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Online Quiz Maker</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard | Online Quiz Maker</title>
+
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
     <div class="container">
-        <h1>Online Quiz Maker</h1>
-        <p>Create quizzes or test your knowledge by taking quizzes.</p>
+        <h2>Dashboard</h2>
+        <p class="subtitle">Welcome! What would you like to do?</p>
 
-        <div class="buttons">
-            <a href="create-quiz.html" class="btn">Create Quiz</a>
-            <a href="quiz-list.html" class="btn btn-outline">Take Quiz</a>
+        <div class="divider"></div>
+
+        <div class="action-buttons">
+            <button class="btn btn-primary" onclick="window.location.href='create-quiz.html'">
+                + Create New Quiz
+            </button>
+
+            <button class="btn btn-outline" onclick="window.location.href='quiz-list.html'">
+                Take a Quiz
+            </button>
         </div>
+
+        <button class="btn btn-danger logout-btn" onclick="logoutUser()">
+            Logout
+        </button>
     </div>
+
+    <script src="auth.js"></script>
+    <script>
+        checkAuth();
+    </script>
 
 </body>
 </html>
-
