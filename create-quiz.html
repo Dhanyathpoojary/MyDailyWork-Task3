@@ -3,48 +3,147 @@
 <head>
     <meta charset="UTF-8">
     <title>Create Quiz</title>
-
-    <!-- Mobile responsive -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <!-- Same CSS as home page -->
+    
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-    <div class="container">
-        <h1>create-quiz</h1>
-        <p>Fill the details below to create a Quiz</p>
-        <form>
-            <label for="title">Quiz-Title</label>
-            <input type="text" id="title" placeholder="Enter quiz title">
+<div class="container">
+    <h1>Create Quiz</h1>
+    <p>Create questions and publish your quiz</p>
 
-            <label for="question">Question</label>
-            <input type="text" id="question" placeholder="Enter your question">
-            
-            <label>Option 1</label>
-            <input type="text" placeholder="Option 1">
-            <label>Option 2</label>
-            <input type="text" placeholder="Option 2">
-            <label>Option 3</label>
-            <input type="text" placeholder="Option 3">
-            <label>Option 4</label>
-            <input type="text" placeholder="Option 4">
-            <label>Correct Answer</label>
-            <select>
-               <option>Select correct option</option>
-                <option>Option 1</option>
-                <option>Option 2</option>
-                <option>Option 3</option>
-                <option>Option 4</option>
+    <div class="divider"></div>
 
-            </select>
-            <button type="submit" class="btn">Save Quiz</button>
+   
+    <label for="quiz-title">Quiz Title</label>
+    <input id="quiz-title" type="text" placeholder="e.g. Science Test">
 
+    
+    <div id="questions-container" style="max-height:420px; overflow-y:auto; margin-top:20px;"></div>
 
+    
+    <div class="action-buttons">
+        <button id="add-q-btn" class="btn btn-outline">
+            + Add Question
+        </button>
 
-
-
-        </form>
-       
+        <button id="save-btn" class="btn btn-primary">
+            Save & Publish Quiz
+        </button>
     </div>
+
+    <button id="cancel-btn" class="btn btn-danger logout-btn">
+        Cancel
+    </button>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+
+    const currentUser = localStorage.getItem('quiz_current_user');
+    if (!currentUser) {
+        window.location.href = 'login.html';
+        return;
+    }
+
+    const questionsContainer = document.getElementById('questions-container');
+    const addBtn = document.getElementById('add-q-btn');
+    const saveBtn = document.getElementById('save-btn');
+    const cancelBtn = document.getElementById('cancel-btn');
+
+    let questionCount = 0;
+
+    function createQuestionElement(num) {
+        const div = document.createElement('div');
+        div.className = 'q-box';
+
+        div.innerHTML = `
+            <div class="q-box-header">Question ${num}</div>
+
+            <label>Question</label>
+            <input class="q-txt" type="text" placeholder="Enter question">
+
+            <div class="grid">
+                <input class="opt" type="text" placeholder="Option 1">
+                <input class="opt" type="text" placeholder="Option 2">
+                <input class="opt" type="text" placeholder="Option 3">
+                <input class="opt" type="text" placeholder="Option 4">
+            </div>
+
+            <label>Correct Answer (1–4)</label>
+            <input class="correct" type="number" min="1" max="4">
+        `;
+        return div;
+    }
+
+    function addQuestionUI() {
+        questionCount++;
+        const qEl = createQuestionElement(questionCount);
+        questionsContainer.appendChild(qEl);
+        qEl.scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function saveQuiz() {
+        const title = document.getElementById('quiz-title').value.trim();
+        if (!title) {
+            alert('Please enter quiz title');
+            return;
+        }
+
+        const qBoxes = questionsContainer.querySelectorAll('.q-box');
+        if (qBoxes.length === 0) {
+            alert('Add at least one question');
+            return;
+        }
+
+        const questions = [];
+
+        for (const box of qBoxes) {
+            const text = box.querySelector('.q-txt').value.trim();
+            const options = Array.from(box.querySelectorAll('.opt')).map(o => o.value.trim());
+            const correctVal = box.querySelector('.correct').value;
+
+            if (!text || options.some(o => o === '')) {
+                alert('Fill all question fields');
+                return;
+            }
+
+            const correct = parseInt(correctVal, 10);
+            if (isNaN(correct) || correct < 1 || correct > 4) {
+                alert('Correct answer must be between 1 and 4');
+                return;
+            }
+
+            questions.push({
+                text,
+                options,
+                correct: correct - 1
+            });
+        }
+
+        const allQuizzes = JSON.parse(localStorage.getItem('quiz_data') || '[]');
+        allQuizzes.push({
+            id: Date.now(),
+            title,
+            creator: currentUser,
+            questions
+        });
+
+        localStorage.setItem('quiz_data', JSON.stringify(allQuizzes));
+        alert('Quiz saved successfully!');
+        window.location.href = 'home.html';
+    }
+
+    addBtn.addEventListener('click', addQuestionUI);
+    saveBtn.addEventListener('click', saveQuiz);
+    cancelBtn.addEventListener('click', () => window.location.href = 'home.html');
+
+    
+    addQuestionUI();
+});
+</script>
+
+</body>
+</html>
